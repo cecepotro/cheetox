@@ -8,11 +8,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 /**
  *
- * @author jesus
+ * @author Jesús Pérez
  */
 public class Conexion {
     
-    public Connection obtener(){
+    /**
+     * Obtiene una conexión hacia la base de datos utilizando los parámetros proporcionados.
+     * @return La conexión a la base de datos.
+     */
+    public static Connection obtener(){
         Connection conexion =null;
         try {
             conexion = DriverManager.getConnection("jdbc:mysql://localhost/cheetodb?user=root&password=admin");

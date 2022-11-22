@@ -6,13 +6,19 @@ package mx.itson.cheeto.entidades;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import mx.itson.cheeto.persistencia.Conexion;
 
 /**
  *
  * @author jesus
  */
 public class Computadora {
-    
+
     private int id;
     private String marca;
     private String modelo;
@@ -21,18 +27,44 @@ public class Computadora {
     private String procesador;
     private String almacenamiento;
     private String os;
-    
-    public List<Computadora> obtener(){
+
+    public List<Computadora> obtener() {
         List<Computadora> computadoras = new ArrayList<>();
-        try{
-            
-        } catch (Exception ex){
+        try {
+            Connection conexion = Conexion.obtener();
+            Statement statement = conexion.createStatement();
+
+            ResultSet resultSet = statement.executeQuery("SELECT id, marca, modelo,color, ram, procesador, almacenamiento, os FROM computadora");
+
+            while (resultSet.next()) {
+                Computadora c = new Computadora();
+                c.setId(resultSet.getInt(1));
+                c.setMarca(resultSet.getString(2));
+                c.setModelo(resultSet.getString(3));
+                c.setColor(resultSet.getString(4));
+                c.setRam(resultSet.getString(5));
+                c.setProcesador(resultSet.getString(6));
+                c.setAlmacenamiento(resultSet.getString(7));
+                c.setOs(resultSet.getString(8));
+
+                computadoras.add(c);
+            }
+        } catch (Exception ex) {
             System.err.println("Ocurrió un error: " + ex.getMessage());
         }
         return computadoras;
     }
-    
-    
+
+    public boolean guardar(String marca, String modelo, String color, String ram, String procesador, String almacenamiento, String os) {
+        boolean resultado = false;
+        try {
+
+        } catch (Exception ex) {
+            System.err.println("Ocurrió un error: " + ex.getMessage());
+        }
+        return resultado;
+    }
+
     /**
      * @return the id
      */
@@ -144,8 +176,5 @@ public class Computadora {
     public void setOs(String os) {
         this.os = os;
     }
-    
 
-    
-    
 }
