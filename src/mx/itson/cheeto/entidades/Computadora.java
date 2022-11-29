@@ -28,7 +28,11 @@ public class Computadora {
     private String almacenamiento;
     private String os;
 
-    public List<Computadora> obtener() {
+    /**
+     * Obtiene los registros de computadora existentes en la base de datos.
+     * @return Lista de computadoras.
+     */
+    public static List<Computadora> obtener() {
         List<Computadora> computadoras = new ArrayList<>();
         try {
             Connection conexion = Conexion.obtener();
@@ -55,10 +59,43 @@ public class Computadora {
         return computadoras;
     }
 
-    public boolean guardar(String marca, String modelo, String color, String ram, String procesador, String almacenamiento, String os) {
+    /**
+     * Guarda un registro de computadora en la base de datos.
+     * @param marca Marca de la computadora
+     * @param modelo Modelo de la computadora
+     * @param color Color de la carcasa de la computadora
+     * @param ram Capacidad de memoria RAM medida en GB
+     * @param procesador Modelo del procesador con el que cuenta la computadora
+     * @param almacenamiento Capacidad de almacanmiento medida en GB
+     * @param os Sistema operativo de la computadora
+     * @return Indica si el registro fue guardado correctamente o no.
+     */
+    public static boolean guardar(String marca, String modelo, String color, String ram, String procesador, String almacenamiento, String os) {
         boolean resultado = false;
         try {
-
+            Connection conexion = Conexion.obtener();
+            String consulta = "INSERT INTO computadora (marca, modelo, color, ram, procesador, almacenamiento, os) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement statement = conexion.prepareStatement(consulta);
+            statement.setString(1, marca);
+            statement.setString(2, modelo);
+            statement.setString(3, color);
+            statement.setString(4, ram);
+            statement.setString(5, procesador);
+            statement.setString(6, almacenamiento);
+            statement.setString(7, os);
+            
+            statement.execute();
+            
+            resultado = statement.getUpdateCount() == 1;
+            
+            /*if(statement.getUpdateCount() == 1){
+                resultado = true;
+            } else {
+                resultado = false;
+            }*/
+            conexion.close();
+            
+            
         } catch (Exception ex) {
             System.err.println("Ocurrió un error: " + ex.getMessage());
         }
