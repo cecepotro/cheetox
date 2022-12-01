@@ -68,6 +68,11 @@ public class Listado extends javax.swing.JFrame {
         jMenu1.add(btnAgregar);
 
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
         jMenu1.add(btnEditar);
 
         jMenuBar1.add(jMenu1);
@@ -118,11 +123,21 @@ public class Listado extends javax.swing.JFrame {
     }
     
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-       ComputadoraForm form = new ComputadoraForm(this, true);
+       ComputadoraForm form = new ComputadoraForm(this, true, 0);
        form.setVisible(true);
         
        cargarTable();
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        int renglon = tblComputadoras.getSelectedRow();
+        int idComputadora = Integer.parseInt(tblComputadoras.getModel().getValueAt(renglon, 0).toString());
+        
+       ComputadoraForm form = new ComputadoraForm(this, true, idComputadora);
+       form.setVisible(true);
+        
+       cargarTable();
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     /**
      * @param args the command line arguments

@@ -13,12 +13,29 @@ import mx.itson.cheeto.entidades.Computadora;
  */
 public class ComputadoraForm extends javax.swing.JDialog {
 
+    int id;
     /**
      * Creates new form ComputadoraForm
      */
-    public ComputadoraForm(java.awt.Frame parent, boolean modal) {
+    public ComputadoraForm(java.awt.Frame parent, boolean modal, int id) {
         super(parent, modal);
         initComponents();
+        
+        this.id = id;
+        
+        if(id != 0){
+            Computadora c = Computadora.obtenerPorId(id);
+            txtMarca.setText(c.getMarca());
+            txtModelo.setText(c.getModelo());
+            txtRam.setText(c.getRam());
+            txtColor.setText(c.getColor());
+            txtProcesador.setText(c.getProcesador());
+            txtAlmacenamiento.setText(c.getAlmacenamiento());
+            txtOs.setText(c.getOs());
+            
+            
+        }
+        
     }
 
     /**
@@ -146,7 +163,17 @@ public class ComputadoraForm extends javax.swing.JDialog {
         String almacenamiento = txtAlmacenamiento.getText();
         String os = txtOs.getText();
         
-        boolean resultado = Computadora.guardar(marca, modelo, color, ram, procesador, almacenamiento, os);
+        /*boolean resultado  = false;
+        if(this.id == 0){
+            resultado = Computadora.guardar(marca, modelo, color, ram, procesador, almacenamiento, os);
+        } else {
+            resultado = Computadora.editar(this.id, marca, modelo, color, ram, procesador, almacenamiento, os);
+        }*/
+        
+        boolean resultado = this.id == 0 ? 
+                Computadora.guardar(marca, modelo, color, ram, procesador, almacenamiento, os) 
+                :
+                Computadora.editar(this.id, marca, modelo, color, ram, procesador, almacenamiento, os);
         
         if(resultado){
             JOptionPane.showMessageDialog(this, "El registro se guardó correctamente", "Registro guardado", JOptionPane.INFORMATION_MESSAGE);
@@ -187,7 +214,7 @@ public class ComputadoraForm extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ComputadoraForm dialog = new ComputadoraForm(new javax.swing.JFrame(), true);
+                ComputadoraForm dialog = new ComputadoraForm(new javax.swing.JFrame(), true,0);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

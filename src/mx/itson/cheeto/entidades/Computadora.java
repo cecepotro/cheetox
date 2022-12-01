@@ -30,6 +30,7 @@ public class Computadora {
 
     /**
      * Obtiene los registros de computadora existentes en la base de datos.
+     *
      * @return Lista de computadoras.
      */
     public static List<Computadora> obtener() {
@@ -59,8 +60,34 @@ public class Computadora {
         return computadoras;
     }
 
+    public static Computadora obtenerPorId(int id) {
+        Computadora computadora = new Computadora();
+        try {
+            Connection conexion = Conexion.obtener();
+            String consulta = "SELECT id, marca, modelo,color, ram, procesador, almacenamiento, os FROM computadora WHERE id = ?";
+            PreparedStatement statement = conexion.prepareStatement(consulta);
+            statement.setInt(1, id);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                computadora.setId(resultSet.getInt(1));
+                computadora.setMarca(resultSet.getString(2));
+                computadora.setModelo(resultSet.getString(3));
+                computadora.setColor(resultSet.getString(4));
+                computadora.setRam(resultSet.getString(5));
+                computadora.setProcesador(resultSet.getString(6));
+                computadora.setAlmacenamiento(resultSet.getString(7));
+                computadora.setOs(resultSet.getString(8));
+            }
+        } catch (Exception ex) {
+            System.err.println("Ocurrió un error: " + ex.getMessage());
+        }
+        return computadora;
+    }
+
     /**
      * Guarda un registro de computadora en la base de datos.
+     *
      * @param marca Marca de la computadora
      * @param modelo Modelo de la computadora
      * @param color Color de la carcasa de la computadora
@@ -83,18 +110,41 @@ public class Computadora {
             statement.setString(5, procesador);
             statement.setString(6, almacenamiento);
             statement.setString(7, os);
-            
+
             statement.execute();
-            
+
             resultado = statement.getUpdateCount() == 1;
-            
+
             /*if(statement.getUpdateCount() == 1){
                 resultado = true;
             } else {
                 resultado = false;
             }*/
             conexion.close();
+
+        } catch (Exception ex) {
+            System.err.println("Ocurrió un error: " + ex.getMessage());
+        }
+        return resultado;
+    }
+
+    public static boolean editar(int id, String marca, String modelo, String color, String ram, String procesador, String almacenamiento, String os) {
+        boolean resultado = false;
+        try {
+            Connection conexion = Conexion.obtener();
+            String consulta = "UPDATE computadora SET marca = ?, modelo = ?, color = ?, ram = ?, procesador = ?, almacenamiento = ?, os = ? WHERE id = ?";
+            PreparedStatement statement = conexion.prepareStatement(consulta);
+            statement.setString(1, marca);
+            statement.setString(2, modelo);
+            statement.setString(3, color);
+            statement.setString(4, ram);
+            statement.setString(5, procesador);
+            statement.setString(6, almacenamiento);
+            statement.setString(7, os);
+            statement.setInt(8, id);
             
+            statement.execute();
+            conexion.close();
             
         } catch (Exception ex) {
             System.err.println("Ocurrió un error: " + ex.getMessage());
